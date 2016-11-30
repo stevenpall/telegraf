@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/influxdata/telegraf"
@@ -149,6 +150,9 @@ func (j *Jolokia) doRequest(req *http.Request) (map[string]interface{}, error) {
 func (j *Jolokia) prepareRequest(server Server, metric Metric) (*http.Request, error) {
 	var jolokiaUrl *url.URL
 	context := j.Context // Usually "/jolokia"
+	if strings.HasSuffix("/", context) == false {
+		context += "/"
+	}
 
 	// Create bodyContent
 	bodyContent := map[string]interface{}{
